@@ -80,11 +80,33 @@ npm ERR! A complete log of this run can be found in: C:\Users\natal\AppData\Loca
 
 **.bootstrap-scaffold left in place at**: `.bootstrap-scaffold/`
 
-Clone succeeded. `npm install` failed while downloading `zwitch-2.0.4.tgz` because Node could not verify the registry TLS certificate (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`). Before that, npm printed many `EBADENGINE` warnings: current Node is v20.12.2 and npm is 10.5.0; `astro@7.3.2` requires Node `>=22.12.0`. The conflict policy was not applied. Files were not moved into the project root.
+Clone succeeded. The first `npm install` failed while downloading `zwitch-2.0.4.tgz` with `UNABLE_TO_VERIFY_LEAF_SIGNATURE` and printed `EBADENGINE` warnings: Node v20.12.2 and npm 10.5.0, while `astro@7.3.2` requires Node `>=22.12.0`.
+
+**Retry**: `npm install` was run again in `.bootstrap-scaffold` and exited 0 (2026-10-22, about 41s). npm reported `changed 202 packages, and audited 649 packages`. The `EBADENGINE` warnings were unchanged. The conflict policy was not applied. Files were not moved into the project root, and the cloned `.git/` is still inside `.bootstrap-scaffold/`.
 
 ## Post-scaffold audit
 
-**Audit not run**: scaffold halted at Step 2; no project to audit.
+**Tool**: `npm audit --json` was not run as a separate pass. Counts below are from the successful `npm install` summary.
+
+**Summary**: 0 CRITICAL, 10 HIGH, 2 MODERATE, 1 LOW (13 total)
+
+**Direct vs transitive**: not distinguished by the install summary
+
+#### CRITICAL findings
+
+None reported.
+
+#### HIGH findings
+
+10, names not captured. The install summary did not list packages.
+
+#### MODERATE findings
+
+2, names not captured.
+
+#### LOW / INFO findings
+
+1 LOW. No INFO count was reported.
 
 ## Hints recorded but not acted on
 
@@ -109,6 +131,7 @@ Clone succeeded. `npm install` failed while downloading `zwitch-2.0.4.tgz` becau
 Next: a future skill will set up agent context (CLAUDE.md, AGENTS.md). For now, your project is scaffolded and verified — happy hacking.
 
 Useful manual steps in the meantime:
-- `git init` (if you have not already) to start your own repo history.
-- Review any `.scaffold` siblings the conflict policy created and decide which version of each file to keep.
-- Address audit findings per your project's risk tolerance — the full breakdown is in this log.
+- Move the starter out of `.bootstrap-scaffold/` into the project root (drop the cloned `.git/`, keep `context/`). That move has not been done.
+- Upgrade Node to `>=22.12.0` before running the app. The install succeeded on v20.12.2, with engine warnings.
+- `git init` is already done in this repo.
+- Run `npm audit` in the installed tree for package names behind the 10 HIGH findings.
